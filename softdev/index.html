@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShroomTech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'teal-dark': '#2d7d7d',
+                        'teal-darker': '#1a5c5c',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <div class="bg-gradient-to-br from-teal-dark to-teal-darker text-white px-7 py-5 flex justify-between items-center shadow-lg">
+        <h1 class="text-3xl font-extrabold">Dashboard</h1>
+        <div class="text-xl font-light opacity-90">Admin</div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="p-7 max-w-6xl mx-auto">
+        <!-- Metrics Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7">
+            <!-- Temperature Card -->
+            <div class="bg-white rounded-xl p-6 shadow-md flex items-center gap-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
+                <div class="w-12 h-12 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-2xl flex-shrink-0">
+                    🌡️
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium mb-1 opacity-80">Temperature</h3>
+                    <div class="text-4xl font-bold">24,8°C</div>
+                </div>
+            </div>
+
+            <!-- CO2 Card -->
+            <div class="bg-white rounded-xl p-6 shadow-md flex items-center gap-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
+                <div class="w-12 h-12 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-2xl flex-shrink-0">
+                    💨
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium mb-1 opacity-80">CO₂ ppm</h3>
+                    <div class="text-4xl font-bold">980 ppm</div>
+                </div>
+            </div>
+
+            <!-- Humidity Card -->
+            <div class="bg-gradient-to-br from-green-400 to-green-500 text-white rounded-xl p-6 shadow-md flex items-center gap-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
+                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center text-2xl flex-shrink-0">
+                    💧
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium mb-1 text-white text-opacity-90">Humidity</h3>
+                    <div class="text-4xl font-bold">65%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="bg-white rounded-xl p-6 shadow-md mb-5">
+            <h2 class="text-xl font-semibold mb-5 text-gray-800">
+                Environmental Controls
+            </h2>
+            
+            <!-- Control Buttons Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <!-- Fogger Button -->
+                <button class="control-button flex flex-col items-center justify-center gap-3 p-4 border-2 border-blue-500 rounded-xl bg-white text-blue-600 font-semibold text-base cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:scale-95" id="foggerButton">
+                    <div class="text-2xl">💧</div>
+                    <div>Fogger</div>
+                    <div class="text-sm opacity-80" id="foggerStatus">OFF</div>
+                </button>
+
+                <!-- Exhaust Button -->
+                <button class="control-button flex flex-col items-center justify-center gap-3 p-4 border-2 border-red-500 rounded-xl bg-white text-red-600 font-semibold text-base cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:scale-95" id="exhaustButton">
+                    <div class="text-2xl">🌪️</div>
+                    <div>Exhaust Fan</div>
+                    <div class="text-sm opacity-80" id="exhaustStatus">OFF</div>
+                </button>
+            </div>
+
+            <!-- Auto Mode Toggle -->
+            <div class="flex items-center gap-2 mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-600">
+                <span>🤖</span>
+                <span>Auto Mode:</span>
+                <div class="auto-toggle w-10 h-5 bg-gray-300 rounded-full relative cursor-pointer transition-colors duration-300" id="autoToggle">
+                    <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-300"></div>
+                </div>
+                <span id="autoStatus">Disabled</span>
+            </div>
+        </div>
+
+        <!-- Alerts Section -->
+        <div class="mb-5">
+            <h1 class="text-xl font-semibold mb-4 text-gray-800">Alerts</h1>
+            <div class="bg-gradient-to-r from-yellow-200 to-yellow-300 text-gray-800 p-4 rounded-lg flex items-center gap-3 mb-3 shadow-md">
+                <div class="text-xl text-orange-600">⚠️</div>
+                <div class="font-semibold text-lg">High CO₂ level detected!</div>
+            </div>
+            <div class="bg-gradient-to-r from-yellow-200 to-yellow-300 text-gray-800 p-4 rounded-lg flex items-center gap-3 shadow-md">
+                <div class="text-xl text-orange-600">⚠️</div>
+                <div class="font-semibold text-lg">High CO₂ level detected!</div>
+            </div>
+        </div>
+
+        <!-- Status Section -->
+        <div class="bg-white rounded-xl p-6 shadow-md">
+            <h2 class="text-xl font-semibold mb-5 text-gray-800">Status</h2>
+            <div class="w-full h-32 relative mb-5">
+                <svg class="w-full h-full" viewBox="0 0 300 80">
+                    <defs>
+                        <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#333;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#666;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Grid lines -->
+                    <line x1="0" y1="60" x2="300" y2="60" stroke="#f0f0f0" stroke-width="1"/>
+                    <line x1="0" y1="40" x2="300" y2="40" stroke="#f0f0f0" stroke-width="1"/>
+                    <line x1="0" y1="20" x2="300" y2="20" stroke="#f0f0f0" stroke-width="1"/>
+                    
+                    <!-- Chart curve -->
+                    <path d="M 0 50 Q 50 45 100 40 Q 150 35 200 45 Q 250 50 300 35" 
+                          stroke="url(#lineGradient)" 
+                          stroke-width="3" 
+                          fill="none"
+                          stroke-linecap="round"/>
+                    
+                    <!-- Y-axis labels -->
+                    <text x="5" y="65" font-size="10" fill="#999">10</text>
+                    <text x="5" y="45" font-size="10" fill="#999">20</text>
+                    <text x="5" y="25" font-size="10" fill="#999">30</text>
+                    
+                    <!-- X-axis labels -->
+                    <text x="40" y="75" font-size="10" fill="#999">22</text>
+                    <text x="80" y="75" font-size="10" fill="#999">24</text>
+                    <text x="120" y="75" font-size="10" fill="#999">26</text>
+                    <text x="160" y="75" font-size="10" fill="#999">28</text>
+                    <text x="200" y="75" font-size="10" fill="#999">30</text>
+                    <text x="260" y="75" font-size="10" fill="#999">60</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Status Footer -->
+        <div class="text-gray-600 text-base mt-5">
+            Offline, last sync: Today, 9:45 AM
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.cursor-pointer');
+            
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+
+            // Control system
+            const foggerButton = document.getElementById('foggerButton');
+            const exhaustButton = document.getElementById('exhaustButton');
+            const autoToggle = document.getElementById('autoToggle');
+            const foggerStatus = document.getElementById('foggerStatus');
+            const exhaustStatus = document.getElementById('exhaustStatus');
+            const autoStatus = document.getElementById('autoStatus');
+
+            let foggerState = false;
+            let exhaustState = false;
+            let autoMode = false;
+
+            // Fogger control
+            foggerButton.addEventListener('click', function() {
+                if (!autoMode) {
+                    foggerState = !foggerState;
+                    updateFoggerDisplay();
+                    console.log('Fogger ' + (foggerState ? 'ON' : 'OFF'));
+                    sendDeviceCommand('fogger', foggerState);
+                }
+            });
+
+            // Exhaust fan control
+            exhaustButton.addEventListener('click', function() {
+                if (!autoMode) {
+                    exhaustState = !exhaustState;
+                    updateExhaustDisplay();
+                    console.log('Exhaust Fan ' + (exhaustState ? 'ON' : 'OFF'));
+                    sendDeviceCommand('exhaust', exhaustState);
+                }
+            });
+
+            // Auto mode toggle
+            autoToggle.addEventListener('click', function() {
+                autoMode = !autoMode;
+                updateAutoModeDisplay();
+                
+                if (autoMode) {
+                    startAutoMode();
+                } else {
+                    stopAutoMode();
+                }
+            });
+
+            function updateFoggerDisplay() {
+                if (foggerState) {
+                    foggerButton.className = 'control-button flex flex-col items-center justify-center gap-3 p-4 border-2 border-blue-500 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white font-semibold text-base cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg shadow-blue-200 active:scale-95';
+                    foggerStatus.textContent = 'ON';
+                } else {
+                    foggerButton.className = 'control-button flex flex-col items-center justify-center gap-3 p-4 border-2 border-blue-500 rounded-xl bg-white text-blue-600 font-semibold text-base cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:scale-95';
+                    foggerStatus.textContent = 'OFF';
+                }
+            }
+
+            function updateExhaustDisplay() {
+                if (exhaustState) {
+                    exhaustButton.className = 'control-button flex flex-col items-center justify-center gap-3 p-4 border-2 border-red-500 rounded-xl bg-gradient-to-br from-red-500 to-red-600 text-white font-semibold text-base cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg shadow-red-200 active:scale-95';
+                    exhaustStatus.textContent = 'ON';
+                } else {
+                    exhaustButton.className = 'control-button flex flex-col items-center justify-center gap-3 p-4 border-2 border-red-500 rounded-xl bg-white text-red-600 font-semibold text-base cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md active:scale-95';
+                    exhaustStatus.textContent = 'OFF';
+                }
+            }
+
+            function updateAutoModeDisplay() {
+                const toggle = autoToggle;
+                const toggleDot = toggle.firstElementChild;
+                
+                if (autoMode) {
+                    toggle.className = 'auto-toggle w-10 h-5 bg-green-500 rounded-full relative cursor-pointer transition-colors duration-300';
+                    toggleDot.className = 'absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-300 transform translate-x-5';
+                    autoStatus.textContent = 'Enabled';
+                    foggerButton.style.opacity = '0.6';
+                    exhaustButton.style.opacity = '0.6';
+                    foggerButton.style.cursor = 'not-allowed';
+                    exhaustButton.style.cursor = 'not-allowed';
+                } else {
+                    toggle.className = 'auto-toggle w-10 h-5 bg-gray-300 rounded-full relative cursor-pointer transition-colors duration-300';
+                    toggleDot.className = 'absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-300';
+                    autoStatus.textContent = 'Disabled';
+                    foggerButton.style.opacity = '1';
+                    exhaustButton.style.opacity = '1';
+                    foggerButton.style.cursor = 'pointer';
+                    exhaustButton.style.cursor = 'pointer';
+                }
+            }
+
+            function startAutoMode() {
+                console.log('Auto mode enabled - Environmental controls will be managed automatically');
+                
+                setInterval(function() {
+                    if (autoMode) {
+                        const humidityElement = document.querySelector('.bg-gradient-to-br.from-green-400 .text-4xl');
+                        const co2Element = document.querySelectorAll('.text-4xl')[1];
+                        
+                        const currentHumidity = parseInt(humidityElement.textContent);
+                        const currentCO2 = parseInt(co2Element.textContent);
+                        
+                        // Auto fogger control (humidity < 60%)
+                        if (currentHumidity < 60 && !foggerState) {
+                            foggerState = true;
+                            updateFoggerDisplay();
+                            sendDeviceCommand('fogger', true);
+                        } else if (currentHumidity > 75 && foggerState) {
+                            foggerState = false;
+                            updateFoggerDisplay();
+                            sendDeviceCommand('fogger', false);
+                        }
+                        
+                        // Auto exhaust control (CO2 > 950ppm)
+                        if (currentCO2 > 950 && !exhaustState) {
+                            exhaustState = true;
+                            updateExhaustDisplay();
+                            sendDeviceCommand('exhaust', true);
+                        } else if (currentCO2 < 800 && exhaustState) {
+                            exhaustState = false;
+                            updateExhaustDisplay();
+                            sendDeviceCommand('exhaust', false);
+                        }
+                    }
+                }, 10000);
+            }
+
+            function stopAutoMode() {
+                console.log('Auto mode disabled - Manual control enabled');
+            }
+
+            function sendDeviceCommand(device, state) {
+                const command = {
+                    device: device,
+                    state: state,
+                    timestamp: new Date().toISOString(),
+                    userId: 'current-user-id'
+                };
+                
+                console.log('Sending command:', command);
+                showNotification(`${device.charAt(0).toUpperCase() + device.slice(1)} turned ${state ? 'ON' : 'OFF'}`);
+            }
+
+            function showNotification(message) {
+                console.log('Notification:', message);
+            }
+
+            // Simulate real-time updates (optional)
+            function updateValues() {
+                const tempElement = document.querySelector('.text-4xl');
+                const currentTemp = parseFloat(tempElement.textContent);
+                const newTemp = (currentTemp + (Math.random() - 0.5) * 0.2).toFixed(1);
+                tempElement.textContent = newTemp + '°C';
+            }
+
+            // Uncomment to enable real-time simulation
+            // setInterval(updateValues, 5000);
+        });
+    </script>
+</body>
+</html>
